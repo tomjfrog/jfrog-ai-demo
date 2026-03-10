@@ -2,9 +2,13 @@
 frogml>=2.0.0
 
 # HuggingFace transformers - model loading from Artifactory
-transformers>=4.30.0
+# transformers 5.x requires torch>=2.4; pin <5 if torch 2.4+ not available in your index
+transformers>=4.30.0,<5.0
 torch>=2.0.0
 accelerate>=0.20.0
+
+# NumPy: torch 2.2.x was built for NumPy 1.x; use <2 if you see "_ARRAY_API not found"
+numpy>=1.24.0,<2
 
 # Data handling
 pandas>=2.0.0

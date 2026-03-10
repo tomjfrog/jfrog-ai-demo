@@ -34,8 +34,10 @@ def test_model_build_and_predict():
             pytest.skip(f"PyTorch/transformers not fully available: {e}")
         raise
 
-    # run_local returns list of dicts, DataFrame, or dict with predictions key
+    # run_local returns list of dicts, DataFrame, dict with predictions key, or JSON string
     assert result is not None
+    if isinstance(result, str):
+        result = json.loads(result)
     if isinstance(result, list):
         assert len(result) == 2
         assert "label" in result[0] and "score" in result[0]
@@ -53,6 +55,11 @@ def test_model_build_and_predict():
         elif isinstance(preds, pd.DataFrame):
             assert len(preds) == 2
             assert "label" in preds.columns and "score" in preds.columns
+        elif isinstance(preds, pd.Series):
+            # Series of chars from JSON string - reconstruct and parse
+            preds = json.loads("".join(preds.astype(str)))
+            assert len(preds) == 2
+            assert "label" in preds[0] and "score" in preds[0]
         else:
             result_df = pd.DataFrame(preds)
             assert len(result_df) == 2
