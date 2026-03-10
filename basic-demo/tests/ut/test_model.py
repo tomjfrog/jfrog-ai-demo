@@ -1,5 +1,7 @@
 """Unit tests for the sentiment classifier model."""
 
+import json
+
 # Import run_local first - required by FrogML for local/testing context
 from frogml.sdk.model.tools import run_local  # noqa: F401
 
@@ -41,11 +43,16 @@ def test_model_build_and_predict():
         assert len(result) == 2
         assert "label" in result.columns and "score" in result.columns
     elif isinstance(result, dict):
-        # Handle dict format, e.g. {"predictions": [...]}
+        # Handle dict format, e.g. {"predictions": [...]} or {"predictions": "[{...}]"}
         preds = result.get("predictions", result.get("output", result))
+        if isinstance(preds, str):
+            preds = json.loads(preds)
         if isinstance(preds, list):
             assert len(preds) == 2
             assert "label" in preds[0] and "score" in preds[0]
+        elif isinstance(preds, pd.DataFrame):
+            assert len(preds) == 2
+            assert "label" in preds.columns and "score" in preds.columns
         else:
             result_df = pd.DataFrame(preds)
             assert len(result_df) == 2
