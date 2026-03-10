@@ -72,6 +72,14 @@ jobs:
           pip download pytest -d ${BASIC_DEMO_DIR}/wheels
 
       - name: Run tests
+        env:
+          # FrogML SDK: needs JF_URL + JF_ACCESS_TOKEN for schema() and gRPC
+          JF_URL: ${{ vars.JF_URL }}
+          JF_PROJECT: ${{ vars.JF_PROJECT }}
+          JF_ACCESS_TOKEN: ${{ steps.jfrog-cli.outputs.oidc-token }}
+          # HuggingFace/Artifactory: for model download via transformers
+          HF_ENDPOINT: ${{ format('{0}/artifactory/api/huggingfaceml/{1}', vars.JF_URL, vars.ARTIFACTORY_HF_REPO || 'hf-remote') }}
+          HF_TOKEN: ${{ steps.jfrog-cli.outputs.oidc-token }}
         run: |
           pip install --no-index -f ${BASIC_DEMO_DIR}/wheels -r ${BASIC_DEMO_DIR}/requirements.txt
           pip install --no-index -f ${BASIC_DEMO_DIR}/wheels pytest

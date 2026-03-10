@@ -226,6 +226,7 @@ Configure these **GitHub repository variables** (Settings → Secrets and variab
 | `ARTIFACTORY_DOCKER_REPO` | No | `docker-local` | Docker repo for built image (default: `docker-local`) |
 | `ARTIFACTORY_GENERIC_REPO` | No | `generic-local` | Generic repo for app zip (default: `generic-local`) |
 | `JF_PYPI_REPO` | No | `pypi-virtual` | PyPI virtual repo for pip (default: `pypi-virtual`) |
+| `ARTIFACTORY_HF_REPO` | No | `hf-remote` | HuggingFaceML repo for model download (default: `hf-remote`) |
 
 **Prerequisites:** Base image must exist in Artifactory at `{DOCKER_REGISTRY}/{DOCKER_REPOSITORY}/{DOCKER_BASE_IMAGE}`. Push `python:3.11-slim` into your Docker repo if needed.
 

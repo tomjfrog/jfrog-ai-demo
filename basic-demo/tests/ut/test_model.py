@@ -32,12 +32,25 @@ def test_model_build_and_predict():
             pytest.skip(f"PyTorch/transformers not fully available: {e}")
         raise
 
-    # run_local returns list of dicts or DataFrame depending on output adapter
+    # run_local returns list of dicts, DataFrame, or dict with predictions key
     assert result is not None
     if isinstance(result, list):
         assert len(result) == 2
         assert "label" in result[0] and "score" in result[0]
+    elif isinstance(result, pd.DataFrame):
+        assert len(result) == 2
+        assert "label" in result.columns and "score" in result.columns
+    elif isinstance(result, dict):
+        # Handle dict format, e.g. {"predictions": [...]}
+        preds = result.get("predictions", result.get("output", result))
+        if isinstance(preds, list):
+            assert len(preds) == 2
+            assert "label" in preds[0] and "score" in preds[0]
+        else:
+            result_df = pd.DataFrame(preds)
+            assert len(result_df) == 2
+            assert "label" in result_df.columns and "score" in result_df.columns
     else:
-        result_df = pd.DataFrame(result) if not isinstance(result, pd.DataFrame) else result
+        result_df = pd.DataFrame(list(result)) if hasattr(result, "__iter__") else pd.DataFrame([result])
         assert len(result_df) == 2
         assert "label" in result_df.columns and "score" in result_df.columns
