@@ -7,7 +7,7 @@
 # Wheels are pre-downloaded in CI (from Artifactory) and copied into the image.
 # No network access needed during Docker build.
 
-ARG DOCKER_BASE_IMAGE=tomjfrog.jfrog.io/frogml-docker/python3.11-slim:3.11-slim
+ARG DOCKER_BASE_IMAGE=tomjfrog.jfrog.io/frogml-docker/python:3.11-slim
 FROM ${DOCKER_BASE_IMAGE}
 
 # Prevent Python from writing pyc files and buffering stdout
