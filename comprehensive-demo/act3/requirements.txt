@@ -1,0 +1,4 @@
+# Act 3: Pinned dependencies for supply chain security
+transformers>=4.30.0,<5.0
+openai>=1.0.0
+frogml-inference

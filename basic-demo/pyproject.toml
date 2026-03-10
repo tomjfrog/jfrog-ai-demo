@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jfrog-ai-demo-basic"
+version = "1.0.0"
+description = "JFrog AI Demo (Basic) - FrogML model with HuggingFace from Artifactory"
+readme = "README.md"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

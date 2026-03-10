@@ -1,0 +1,28 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv
+venv
+env
+.pytest_cache
+.coverage
+htmlcov
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Misc
+README.md
+.github
+*.md
+.DS_Store

@@ -1,0 +1,10 @@
+# FrogML SDK and ML dependencies (frogml includes FrogMlModel, schema, etc.)
+frogml>=2.0.0
+transformers>=4.30.0
+torch>=2.0.0
+accelerate>=0.20.0
+pandas>=2.0.0
+
+# Web server for standalone deployment
+fastapi>=0.100.0
+uvicorn[standard]>=0.22.0

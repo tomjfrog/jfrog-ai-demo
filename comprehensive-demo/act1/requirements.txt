@@ -1,0 +1,4 @@
+# Act 1: Unpinned dependencies - supply chain risk
+transformers
+openai
+torch

@@ -1,0 +1,10 @@
+# FrogML SDK - model build and deployment
+frogml>=2.0.0
+
+# HuggingFace transformers - model loading from Artifactory
+transformers>=4.30.0
+torch>=2.0.0
+accelerate>=0.20.0
+
+# Data handling
+pandas>=2.0.0
