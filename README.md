@@ -8,6 +8,7 @@ A technical demo showcasing JFrog's AI/ML capabilities. This project includes tw
 |----------|-------------|----------|
 | **Basic** | Containerized sentiment classifier using FrogML SDK with a HuggingFace model sourced from Artifactory. Focuses on the fundamentals: model loading via proxy, Docker deployment, and Xray scanning. | Quick start, learning the core JFrog ML workflow |
 | **Advanced** | Four-act narrative transitioning "Shadow AI" to governed AISecOps. Covers rogue baseline (Act 1), supply chain security (Act 2), AI Gateway + frogml-inference (Act 3), and IDE/MCP integration (Act 4). | Enterprise readiness, security governance, full AISecOps story |
+| **Notebooks** | Jupyter notebook demos: sentiment from Artifactory, FrogML log_model (AI-BOM), HuggingFace proxy comparison | Interactive exploration, learning |
 
 Both demos deploy to Artifactory and are scanned for security and license compliance via JFrog Xray.
 
@@ -81,10 +82,19 @@ jfrog-ai-demo/
 │   ├── act2/                # Proxy config (Artifactory & Curation)
 │   ├── act3/                # Governed (AI Gateway, frogml-inference)
 │   └── act4/                # IDE/MCP integration docs
+├── notebooks/               # Jupyter demo scenarios
+│   ├── sentiment/           # HuggingFace/transformers demos
+│   │   ├── 01-sentiment-from-artifactory.ipynb
+│   │   ├── 02-frogml-log-model-ai-bom.ipynb
+│   │   └── 03-huggingface-proxy-demo.ipynb
+│   └── fraud-detection/     # CatBoost/XGBoost fraud model (conda.yml)
+│       ├── credit-card-fraud-detection.ipynb
+│       └── main/
 ├── .github/
 │   └── workflows/
 │       ├── build-and-deploy.yml              # Basic: sentiment classifier
-│       └── comprehensive-build-and-deploy.yml # Advanced: Act 3 churn prediction
+│       ├── comprehensive-build-and-deploy.yml # Advanced: Act 3 churn prediction
+│       └── notebooks-execute.yml             # Execute notebooks (CI verification)
 ├── specs/
 │   └── comprehensive-demo-spec.md
 └── README.md
@@ -250,9 +260,40 @@ cd comprehensive-demo
 # See comprehensive-demo/README.md for full instructions
 ```
 
-**Workflows:** Both demos have dedicated GitHub Actions workflows at the repository root:
+**Workflows:** All demos have dedicated GitHub Actions workflows:
 - `build-and-deploy.yml` — Basic demo (sentiment classifier; runs on changes to `basic-demo/**`)
 - `comprehensive-build-and-deploy.yml` — Advanced demo (Act 3 churn prediction; runs on changes to `comprehensive-demo/**`)
+- `notebooks-execute.yml` — Execute Jupyter notebooks (runs on changes to `notebooks/**`)
+
+---
+
+## Notebooks
+
+The **notebooks/** directory contains scenario-based demos. Each scenario has its own env config (Conda and/or pip).
+
+| Scenario | Description |
+|----------|-------------|
+| **sentiment/** | HuggingFace sentiment model, FrogML log_model, proxy demo |
+| **fraud-detection/** | CatBoost/XGBoost credit card fraud (Conda recommended) |
+
+**Quick start (sentiment):**
+
+```bash
+pip install -r notebooks/requirements.txt
+cd notebooks/sentiment
+jupyter notebook
+```
+
+**Quick start (fraud-detection):**
+
+```bash
+cd notebooks/fraud-detection
+conda env create -f conda.yml
+conda activate fraud-detection
+jupyter notebook
+```
+
+See [notebooks/README.md](notebooks/README.md) for full setup and Conda details.
 
 ## License
 

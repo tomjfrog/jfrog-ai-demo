@@ -11,3 +11,6 @@ venv/
 
 # OS
 .DS_Store
+
+# Conda (may contain Artifactory credentials)
+.condarc

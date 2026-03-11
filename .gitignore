@@ -31,6 +31,13 @@ Thumbs.db
 # FrogML
 .frogml/
 
+# Conda (may contain Artifactory credentials)
+.condarc
+**/.condarc
+
+# Notebook artifacts (fraud-detection CatBoost)
+**/catboost_info
+
 # CI-generated wheels (downloaded in pipeline, not committed)
 **/wheels/
 

@@ -1,0 +1,74 @@
+# Execute Jupyter notebooks to verify they run without errors
+#
+# Runs on changes to notebooks/ or manual trigger.
+# Uses Artifactory OIDC when vars are configured; otherwise notebooks
+# fall back to public HuggingFace where applicable.
+
+name: Notebooks - Execute
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'notebooks/**'
+  pull_request:
+    branches: [main, master]
+    paths:
+      - 'notebooks/**'
+  workflow_dispatch:
+
+jobs:
+  execute-notebooks:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Setup JFrog CLI (optional, for Artifactory-backed notebooks)
+        id: jfrog-cli
+        if: vars.JF_URL != ''
+        uses: jfrog/setup-jfrog-cli@v4
+        env:
+          JF_URL: ${{ vars.JF_URL }}
+          JF_PROJECT: ${{ vars.JF_PROJECT }}
+        with:
+          oidc-provider-name: 'github-oidc-integration'
+          oidc-audience: 'jfrog-github'
+
+      - name: Install dependencies
+        run: |
+          pip install -r notebooks/requirements.txt
+          pip install -r notebooks/fraud-detection/requirements.txt
+          pip install nbconvert
+
+      - name: Set Artifactory env for notebooks
+        if: vars.JF_URL != ''
+        run: |
+          echo "JF_URL=${{ vars.JF_URL }}" >> $GITHUB_ENV
+          echo "JF_PROJECT=${{ vars.JF_PROJECT }}" >> $GITHUB_ENV
+          echo "JF_ACCESS_TOKEN=${{ steps.jfrog-cli.outputs.oidc-token }}" >> $GITHUB_ENV
+          echo "HF_ENDPOINT=${{ format('{0}/artifactory/api/huggingfaceml/{1}', vars.JF_URL, vars.ARTIFACTORY_HF_REPO || 'hf-remote') }}" >> $GITHUB_ENV
+          echo "HF_TOKEN=${{ steps.jfrog-cli.outputs.oidc-token }}" >> $GITHUB_ENV
+
+      - name: Execute notebooks
+        run: |
+          cd notebooks
+          for dir in sentiment fraud-detection; do
+            if [ -d "$dir" ]; then
+              for f in "$dir"/*.ipynb; do
+                [ -f "$f" ] || continue
+                echo "Executing $f..."
+                jupyter nbconvert --execute --to notebook --inplace "$f" --ExecutePreprocessor.timeout=600
+              done
+            fi
+          done
+          echo "All notebooks executed successfully."
