@@ -35,11 +35,15 @@ Thumbs.db
 .condarc
 **/.condarc
 
-# Notebook artifacts (fraud-detection CatBoost)
+# Notebook artifacts
 **/catboost_info
+**/qwen-finetuned
+**/qwen-0.5b-devops-adapter
 
 # CI-generated wheels (downloaded in pipeline, not committed)
 **/wheels/
 
 *.pdf
 .cursor/
+**/.env
+.env

@@ -15,14 +15,20 @@ notebooks/
 │   ├── 02-frogml-log-model-ai-bom.ipynb
 │   └── 03-huggingface-proxy-demo.ipynb
 │
-└── fraud-detection/          # CatBoost / XGBoost fraud model
-    ├── conda.yml             # Conda environment (recommended)
-    ├── requirements.txt      # pip fallback for CI / non-Conda users
-    ├── credit-card-fraud-detection.ipynb
+├── fraud-detection/          # CatBoost / XGBoost fraud model
+│   ├── conda.yml
+│   ├── requirements.txt
+│   ├── credit-card-fraud-detection.ipynb
+│   ├── main/
+│   └── README.md
+│
+└── devops-helper/            # Qwen LLM fine-tuning (LoRA)
+    ├── conda.yml
+    ├── requirements.txt
+    ├── llm_finetuning_devops.ipynb
+    ├── code_dir/
+    │   └── predict.py
     ├── main/
-    │   ├── model.py
-    │   ├── data_processor.py
-    │   └── small_fraud_dataset.csv
     └── README.md
 ```
 
@@ -49,11 +55,24 @@ conda activate fraud-detection
 jupyter notebook
 ```
 
-**Or with pip:**
+### DevOps Helper (Conda recommended)
+
+LLM fine-tuning with transformers, peft, trl. Conda handles PyTorch and native deps.
+
+```bash
+cd notebooks/devops-helper
+conda env create -f conda.yml
+conda activate devops-helper
+jupyter notebook
+```
+
+**Or with pip (fraud-detection / devops-helper):**
 
 ```bash
 pip install -r notebooks/fraud-detection/requirements.txt
-cd notebooks/fraud-detection
+# or
+pip install -r notebooks/devops-helper/requirements.txt
+cd notebooks/fraud-detection  # or devops-helper
 jupyter notebook
 ```
 
@@ -62,8 +81,9 @@ jupyter notebook
 Copy `.env.example` to `.env` in `notebooks/` and fill in:
 
 - `JF_URL`, `JF_ACCESS_TOKEN` – FrogML / Artifactory
-- `HF_ENDPOINT`, `HF_TOKEN` – HuggingFace proxy (sentiment demos)
+- `HF_ENDPOINT`, `HF_TOKEN` – HuggingFace proxy (sentiment, devops-helper)
+- `JF_MODEL_REPO` – (optional) Model upload repo for devops-helper
 
 ## CI
 
-The `notebooks-execute.yml` workflow runs all notebooks in `sentiment/` and `fraud-detection/` to verify they execute. Fraud detection uses `requirements.txt` (pip) in CI; Conda is for local use.
+The `notebooks-execute.yml` workflow runs all notebooks in `sentiment/`, `fraud-detection/`, and `devops-helper/` to verify they execute. Fraud detection and devops-helper use `requirements.txt` (pip) in CI; Conda is for local use.

@@ -48,6 +48,7 @@ jobs:
         run: |
           pip install -r notebooks/requirements.txt
           pip install -r notebooks/fraud-detection/requirements.txt
+          pip install -r notebooks/devops-helper/requirements.txt
           pip install nbconvert
 
       - name: Set Artifactory env for notebooks
@@ -58,11 +59,12 @@ jobs:
           echo "JF_ACCESS_TOKEN=${{ steps.jfrog-cli.outputs.oidc-token }}" >> $GITHUB_ENV
           echo "HF_ENDPOINT=${{ format('{0}/artifactory/api/huggingfaceml/{1}', vars.JF_URL, vars.ARTIFACTORY_HF_REPO || 'hf-remote') }}" >> $GITHUB_ENV
           echo "HF_TOKEN=${{ steps.jfrog-cli.outputs.oidc-token }}" >> $GITHUB_ENV
+          echo "JF_MODEL_REPO=${{ vars.JF_MODEL_REPO || 'devops-helper-llms' }}" >> $GITHUB_ENV
 
       - name: Execute notebooks
         run: |
           cd notebooks
-          for dir in sentiment fraud-detection; do
+          for dir in sentiment fraud-detection devops-helper; do
             if [ -d "$dir" ]; then
               for f in "$dir"/*.ipynb; do
                 [ -f "$f" ] || continue
