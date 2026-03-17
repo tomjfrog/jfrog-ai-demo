@@ -1,0 +1,22 @@
+# DevOps Helper LLM fine-tuning notebook environment
+# Create: conda env create -f conda.yml
+# Activate: conda activate devops-helper
+# Channels come from .condarc only (Artifactory); no channel names here
+name: devops-helper
+dependencies:
+  - python=3.11
+  - numpy>=1.24,<2
+  - pandas>=1.5
+  - pytorch>=2.4
+  - pip
+  - pip:
+    - python-dotenv>=1.0.0
+    - transformers>=4.52
+    - accelerate>=1.8
+    - datasets
+    - peft>=0.11
+    - trl
+    - bitsandbytes
+    - frogml>=2.0.0
+    - jupyter
+    - ipykernel
