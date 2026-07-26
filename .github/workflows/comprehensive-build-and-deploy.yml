@@ -46,7 +46,6 @@ jobs:
           JF_PROJECT: ${{ vars.JF_PROJECT }}
         with:
           oidc-provider-name: 'github-oidc-integration'
-          oidc-audience: 'jfrog-github'
 
       - name: Set version
         id: version
